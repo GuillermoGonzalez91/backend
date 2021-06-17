@@ -1,3 +1,6 @@
+
+//comentario para ver en gitHub
+
 module.exports = (sequelize, type) => {
     return sequelize.define('blog', {
         id:{

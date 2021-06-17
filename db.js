@@ -7,7 +7,6 @@ const sequelize = new Sequelize ('OyX8LVy05j','OyX8LVy05j','6yvhmVZnDo',{
         dialect: 'mysql'
 })
 
-
 const Blog = BlogModel(sequelize,Sequelize);
 
 sequelize.sync({force:false})
