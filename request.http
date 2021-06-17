@@ -1,0 +1,31 @@
+###
+GET http://localhost:9000/api HTTP/1.1
+
+
+###
+GET http://localhost:9000/api/tipo HTTP/1.1
+
+
+###
+POST http://localhost:9000/api HTTP/1.1
+Content-Type: application/json
+
+
+
+//{
+//    "concepto": "luz",
+//    "monto": 200,
+//    "fecha": "2021/11/09",
+//    "tipo" :"gastos"
+//}
+
+###
+DELETE http://localhost:9000/api/id HTTP/1.1
+
+###
+PUT http://localhost:9000/api HTTP/1.1
+Content-Type: application/json
+
+{
+   
+}
