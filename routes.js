@@ -1,85 +1,76 @@
-const express = require('express')
+const express = require('express');
+const { Blog } = require('./db')
 const routes = express.Router()
+         
+routes.get('/', async (req, res)=>{
+    const blogs = await Blog.findAll(req.body,
+        {
+            attributes: [
+                'id',
+                'title',
+                'img',
+                'createdAt'
+            ],
+            order: [['createdAt', 'DESC']]
+        });
+        if(blogs){
+            res.json(blogs)
+        }else
+        {
+            res.json({
+                error: 'no se encontraron registros'
+            })
+        }
+        }
+                 
+)
 
-routes.get('/', (req, res)=>{
-    req.getConnection((err, conn)=>{
-        if(err) return res.send(err)
-
-        conn.query('SELECT * FROM movimientos', (err, rows)=>{
-            if(err) return res.send(err)
-            else{
-
-                res.json(rows)                
-            }
-        
-        })
+routes.get('/:id', async (req, res)=>{
+    const blogs = await Blog.findAll({
+        where:{id:req.params.id}
     })
+    if(blogs){
+        res.json(blogs)
+    }else
+    {
+        res.json({
+            error: 'no se encontraron registros'
+        })
+    }
+    })
+
+routes.post('/', async (req, res)=>{
+    const blogs = await Blog.create(req.body);
+                res.json(blogs)                
 })
 
-
-
-routes.post('/', (req, res)=>{
-    req.getConnection((err, conn)=>{
-        if(err) return res.send(err)
-        conn.query('INSERT INTO movimientos set ?', [req.body], (err, rows)=>{
-          
-            if(err) return res.send(err)
-
-            res.send('Movimiento guardado')
-        })
+routes.delete('/:id', async (req, res)=>{
+    
+    const blogs = await Blog.findAll({
+        where:{id:req.params.id}
     })
-})
-
-routes.delete('/:id', (req, res)=>{
-    req.getConnection((err, conn)=>{
-        if(err) return res.send(err)
-        conn.query('DELETE FROM movimientos WHERE id = ?', [req.params.id], (err, rows)=>{
-            if(err) return res.send(err)
-
-            res.send('Movimiento Borrado!!')
-        })
+   
+    if(!blogs){
+        return res.json({
+            error: 'el registro no se encontro'
+        });
+    }
+      Blog.destroy({
+        where:{id:req.params.id}
     })
-})
-
-routes.put('/:id', (req, res)=>{
-    req.getConnection((err, conn)=>{
-        if(err) return res.send(err)
-        conn.query('UPDATE movimientos set ? WHERE id = ?', [req.body, req.params.id], (err, rows)=>{
-            if(err) return res.send(err)
-
-            res.send('Movimiento Guardado!')
-        })
+              res.json({success: 'se borro el registro correctamente' })
     })
-})
 
 
 
-routes.put('/', (req, res)=>{
-    req.getConnection((err, conn)=>{
-        if(err) return res.send(err)
-        conn.query('SELECT movimientos set ? WHERE tipo = ?', [req.body, req.params.id], (err, rows)=>{
-            if(err) return res.send(err)
-            res.json(rows)            
-
-        })
+routes.patch('/:id', async (req, res)=>{
+   await Blog.patch({
+     where:{id:req.params.id}
+     })
+      res.json({success: 'se modidico el registro correctamente' })
     })
-})
 
-
-routes.get('/tipo', (req, res)=>{
-    req.getConnection((err, conn)=>{
-        if(err) return res.send(err)
-
-        conn.query('SELECT * FROM movimientos where tipo = "Egreso";', (err,rows)=>{
-            if(err) return res.send(err)
-            else{
-
-                res.json(rows) 
-            }
-        
-        })
-    })
-})
 
 
 module.exports = routes
+

@@ -13,6 +13,7 @@ sequelize.sync({force:false})
 .then(() => {
     console.log('tablas sincronizadas')
 })
+.catch((error) => console.error(error));
 
 module.exports = {
     Blog
